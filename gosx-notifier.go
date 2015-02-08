@@ -5,7 +5,6 @@ import (
 	"net/url"
 	"os/exec"
 	"path/filepath"
-	"strings"
 )
 
 type Sound string
@@ -33,6 +32,7 @@ type Notification struct {
 	Subtitle     string //optional
 	Sound        Sound  //optional
 	Link         string //optional
+	Activate     string //optional
 	Sender       string //optional
 	Group        string //optional
 	AppIcon      string //optional
@@ -106,12 +106,12 @@ func (n *Notification) Push() error {
 		}
 
 		//add bundle id if specified
-		if strings.HasPrefix(strings.ToLower(n.Link), "com.") {
-			commandTuples = append(commandTuples, []string{"-activate", n.Link}...)
+		if n.Activate != "" {
+			commandTuples = append(commandTuples, []string{"-activate", n.Activate}...)
 		}
 
 		//add sender if specified
-		if strings.HasPrefix(strings.ToLower(n.Sender), "com.") {
+		if n.Sender != "" {
 			commandTuples = append(commandTuples, []string{"-sender", n.Sender}...)
 		}
 
